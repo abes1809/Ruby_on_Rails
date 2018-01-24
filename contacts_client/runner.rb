@@ -55,8 +55,19 @@ elsif input_option == "3"
                           parameters: client_params
                           )
 
-  contact = response.body 
-  puts JSON.pretty_generate(contact)
+  if response.code == 200
+    contact = response.body 
+    puts JSON.pretty_generate(contact)
+  else 
+    errors = response.body["errors"]
+    puts ""
+    puts "Your contact did not save."
+    puts "For the following reasons: "
+    puts "---" * 10
+    errors.each do |error|
+      puts error 
+    end 
+  end 
 
 elsif input_option == "4"
   print "What's the ID of the contact you would like to update? "
@@ -90,8 +101,20 @@ elsif input_option == "4"
   response = Unirest.patch("http://localhost:3000/contacts/#{input_id}",
                             parameters: client_params
                             )
-  product = response.body 
-  puts JSON.pretty_generate(product)
+
+  if response.code == 200
+    product = response.body 
+    puts JSON.pretty_generate(product)
+  else 
+    errors = response.body["errors"]
+    puts ""
+    puts "Your contact did not update."
+    puts "For the following reasons: "
+    puts "---" * 10
+    errors.each do |error|
+      puts error
+    end 
+  end 
 
 elsif input_option == "5"
   print "Enter the ID of the contact you want to delete: "
